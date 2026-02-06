@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nuestra boda</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <!-- Swiper -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+
+</head>
+
+<body>
+
+  <!-- 🌐 HEADER / MENÚ -->
+  <header class="header">
+    <nav class="nav container">
+
+      <!-- Logo -->
+      <div class="nav__logo">
+        <span>A & B</span>
+      </div>
+
+      <!-- Menú -->
+      <ul class="nav__menu" id="navMenu">
+        <li><a href="#story" data-i18n="menu.story">Historia</a></li>
+        <li><a href="#gallery" data-i18n="menu.gallery">Galería</a></li>
+        <li><a href="#countdown" data-i18n="menu.countdown">Cuenta atrás</a></li>
+        <li><a href="#details" data-i18n="menu.details">Detalles</a></li>
+        <li><a href="#location" data-i18n="menu.location">Ubicación</a></li>
+        <li><a href="#rsvp" data-i18n="menu.rsvp">RSVP</a></li>
+      </ul>
+
+      <!-- Idioma -->
+      <div class="nav__lang">
+        <button data-lang="es">ES</button>
+        <button data-lang="en">EN</button>
+        <button data-lang="ro">RO</button>
+      </div>
+
+      <!-- Botón hamburguesa -->
+      <button class="nav__toggle" id="navToggle" aria-label="Abrir menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+
+    </nav>
+  </header>
+
+
+  <!-- 💍 BANNER PRINCIPAL -->
+  <section class="hero" id="hero">
+    <div class="hero__content container">
+      <h1 data-i18n="hero.title">NOS CASAMOS</h1>
+      <p data-i18n="hero.subtitle">24 de mayo de 2026 · Detroit</p>
+    </div>
+  </section>
+
+  <!-- 📖 HISTORIA / INTRO -->
+  <section class="section story" id="story">
+    <div class="container">
+      <h2 data-i18n="story.title">Nuestra historia</h2>
+      <p data-i18n="story.text">
+        Un pequeño texto bonito contando vuestra historia o una frase especial.
+      </p>
+    </div>
+  </section>
+
+  <!-- 🎠 CARRUSEL -->
+  <section class="section gallery" id="gallery">
+  <div class="container">
+    <h2 data-i18n="gallery.title">Momentos</h2>
+
+    <div class="swiper wedding-swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide">
+          <p data-i18n="gallery.slide1">Nuestra historia comienza</p>
+        </div>
+        <div class="swiper-slide">
+          <p data-i18n="gallery.slide2">El gran día se acerca</p>
+        </div>
+        <div class="swiper-slide">
+          <p data-i18n="gallery.slide3">Te esperamos</p>
+        </div>
+      </div>
+
+      <!-- Controles -->
+      <div class="swiper-pagination"></div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- ⏳ COUNTDOWN -->
+  <section class="section countdown" id="countdown">
+    <div class="container">
+      <h2 data-i18n="countdown.title">Cuenta atrás</h2>
+
+      <div class="countdown__wrapper">
+        <div class="countdown__item">
+          <span id="days">00</span>
+          <small data-i18n="countdown.days">Días</small>
+        </div>
+        <div class="countdown__item">
+          <span id="hours">00</span>
+          <small data-i18n="countdown.hours">Horas</small>
+        </div>
+        <div class="countdown__item">
+          <span id="minutes">00</span>
+          <small data-i18n="countdown.hours">Horas</small>
+        </div>
+        <div class="countdown__item">
+          <span id="seconds">00</span>
+          <small data-i18n="countdown.seconds">Segundos</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📋 DATOS DE LA INVITACIÓN -->
+  <section class="section details" id="details">
+    <div class="container">
+      <h2 data-i18n="details.title">Detalles del evento</h2>
+
+      <div class="details__grid">
+        <div class="details__item">
+          <span class="material-icons">calendar_month</span>
+          <p data-i18n="details.date">24 de mayo de 2026</p>
+        </div>
+
+        <div class="details__item">
+          <span class="material-icons">schedule</span>
+          <p data-i18n="details.time">17:00 h</p>
+        </div>
+
+        <div class="details__item">
+          <span class="material-icons">location_on</span>
+          <p data-i18n="details.place">Detroit, Michigan</p>
+        </div>
+
+        <div class="details__item">
+          <span class="material-icons">favorite</span>
+          <p data-i18n="details.type">Celebración religiosa</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🗺 MAPA -->
+  <section class="section location" id="location">
+    <div class="container">
+      <h2 data-i18n="location.title">Cómo llegar</h2>
+
+      <div class="map">
+        <!-- Google Maps embed -->
+        <iframe
+          src="https://www.google.com/maps/embed?pb=..."
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✉️ RSVP -->
+  <section class="section rsvp" id="rsvp">
+    <div class="container">
+      <h2 data-i18n="rsvp.title">Confirmar asistencia</h2>
+
+      <form class="rsvp__form">
+        <input type="text" placeholder="Nombre" data-i18n-placeholder="rsvp.name" required>
+        <input type="email" placeholder="Email" data-i18n-placeholder="rsvp.email">
+        <button type="submit" data-i18n="rsvp.button">Confirmar</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 👣 FOOTER -->
+  <footer class="footer">
+    <p data-i18n="footer.text">Con cariño · A & B · 2026</p>
+  </footer>
+
+  <!-- JS -->
+  <script src="script.js"></script>
+
+</body>
+</html>

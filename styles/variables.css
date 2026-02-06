@@ -1,0 +1,20 @@
+:root {
+  /* 🎨 Colores */
+  --color-primary: #0a5157;
+  --color-secondary: #0b727b;
+  --color-terciary: #028f96;
+  --color-decorative: #c8ad8f;
+  --color-text: #1f2a2b;
+  --color-background: #ece8df;
+
+  /* 🔤 Fuentes */
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* 📐 Tamaños */
+  --font-size-title: 2.5rem;
+  --font-size-body: 1rem;
+
+  /* 🧿 Iconos */
+  --icon-size: 32px;
+}
