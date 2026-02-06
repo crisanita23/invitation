@@ -1,4 +1,6 @@
-/** SWIPER CONFIGURATION */
+/* =========================
+   CONFIGURACIÓN SWIPER
+========================= */
 const weddingSwiper = new Swiper(".wedding-swiper", {
   loop: true,
   speed: 800,
@@ -38,7 +40,35 @@ const weddingSwiper = new Swiper(".wedding-swiper", {
   },
 });
 
-/** HEADER MOBILE */
+/* =========================
+   HEADER SCROLL
+========================= */
+
+let lastScroll = 0;
+const header = document.querySelector(".header");
+
+window.addEventListener("scroll", () => {
+  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (currentScroll > lastScroll && currentScroll > 100) {
+    // Scroll hacia abajo → ocultar
+    header.style.transform = "translateY(-100%)";
+  } else {
+    // Scroll hacia arriba → mostrar
+    header.style.transform = "translateY(0)";
+  }
+
+  lastScroll = currentScroll;
+
+  if (currentScroll <= 50) {
+    header.style.transform = "translateY(0)";
+  }
+});
+
+
+/* =========================
+   HEADER MÓVIL
+========================= */
 const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("navMenu");
 
@@ -60,7 +90,9 @@ window.addEventListener("scroll", () => {
   navToggle.classList.remove("active");
 });
 
-/** TRADUCTIONS */
+/* =========================
+   TRADUCCIONES
+========================= */
 const translations = {
   es: {
     menu: {
@@ -98,6 +130,13 @@ const translations = {
       time: "17:00 h",
       place: "Detroit, Michigan",
       type: "Celebración religiosa",
+    },
+    schedule: {
+      title: "Horario del evento",
+      item1: "Ceremonia religiosa",
+      item2: "Cóctel y aperitivos",
+      item3: "Cena y brindis",
+      item4: "Fiesta y baile",
     },
     location: {
       title: "Cómo llegar",
@@ -150,6 +189,13 @@ const translations = {
       place: "Detroit, Michigan",
       type: "Religious ceremony",
     },
+    schedule: {
+      title: "Event schedule",
+      item1: "Religious ceremony",
+      item2: "Cocktail & appetizers",
+      item3: "Dinner & toast",
+      item4: "Party & dancing",
+    },
     location: {
       title: "How to get there",
     },
@@ -201,6 +247,13 @@ const translations = {
       place: "Detroit, Michigan",
       type: "Ceremonie religioasă",
     },
+    schedule: {
+      title: "Programul evenimentului",
+      item1: "Ceremonie religioasă",
+      item2: "Cocktail și aperitive",
+      item3: "Cină și toast",
+      item4: "Petrecere și dans",
+    },
     location: {
       title: "Cum ajungi",
     },
@@ -247,10 +300,82 @@ document.querySelectorAll("[data-lang]").forEach(btn => {
 });
 
 /* =========================
-   IDIOMA INICIAL
+   IDIOMA URL
 ========================= */
-const defaultLang = localStorage.getItem("language") || "es";
+function getLangFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const lang = params.get("lang");
+  if (lang && ["es", "en", "ro"].includes(lang)) {
+    return lang;
+  }
+  return null; // Ninguno válido
+}
+
+// Primero revisamos la URL
+const urlLang = getLangFromUrl();
+
+// Idioma guardado en localStorage
+const savedLang = localStorage.getItem("language");
+
+// Prioridad: URL > LocalStorage > Español por defecto
+const defaultLang = urlLang || savedLang || "es";
+
 setLanguage(defaultLang);
+
+document.querySelectorAll("[data-lang]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const lang = btn.dataset.lang;
+    setLanguage(lang);
+
+    // Actualizar query param sin recargar
+    const url = new URL(window.location);
+    url.searchParams.set("lang", lang);
+    window.history.replaceState({}, "", url);
+  });
+});
+
+// =========================
+// COUNTDOWN
+// =========================
+function startCountdown(targetDate) {
+  const daysEl = document.getElementById("days");
+  const hoursEl = document.getElementById("hours");
+  const minutesEl = document.getElementById("minutes");
+  const secondsEl = document.getElementById("seconds");
+
+  function updateCountdown() {
+    const now = new Date().getTime();
+    const distance = targetDate - now;
+
+    if (distance <= 0) {
+      // Evento alcanzado
+      daysEl.textContent = "00";
+      hoursEl.textContent = "00";
+      minutesEl.textContent = "00";
+      secondsEl.textContent = "00";
+      clearInterval(countdownInterval);
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+    // Agregar cero delante si es <10
+    daysEl.textContent = String(days).padStart(2, "0");
+    hoursEl.textContent = String(hours).padStart(2, "0");
+    minutesEl.textContent = String(minutes).padStart(2, "0");
+    secondsEl.textContent = String(seconds).padStart(2, "0");
+  }
+
+  updateCountdown();
+  const countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+// Fecha objetivo: 24 de mayo de 2026 a las 17:00
+const weddingDate = new Date("2026-05-24T17:00:00").getTime();
+startCountdown(weddingDate);
 
 
 
