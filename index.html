@@ -40,6 +40,11 @@
         <li><a href="#details" data-i18n="menu.details">Detalles</a></li>
         <li><a href="#location" data-i18n="menu.location">Ubicación</a></li>
         <li><a href="#rsvp" data-i18n="menu.rsvp">RSVP</a></li>
+        <li class="nav__lang">
+          <button data-lang="es">ES</button>
+          <button data-lang="en">EN</button>
+          <button data-lang="ro">RO</button>
+        </li>
       </ul>
 
       <!-- Idioma -->
@@ -161,6 +166,61 @@
     </div>
   </section>
 
+  <!-- 🕰 CRONOLIGÍA -->
+  <section class="section timeline" id="timeline">
+    <div class="container">
+      <h2 data-i18n="schedule.title">Horario del evento</h2>
+
+      <div class="timeline__wrapper">
+
+        <!-- Evento 1 -->
+        <div class="timeline__event">
+          <div class="timeline__icon">
+            <span class="material-icons">cake</span>
+          </div>
+          <div class="timeline__content">
+            <span class="timeline__time">10:00</span>
+            <p class="timeline__text" data-i18n="schedule.item1">Ceremonia religiosa</p>
+          </div>
+        </div>
+
+        <!-- Evento 2 -->
+        <div class="timeline__event">
+          <div class="timeline__icon">
+            <span class="material-icons">local_cafe</span>
+          </div>
+          <div class="timeline__content">
+            <span class="timeline__time">12:00</span>
+            <p class="timeline__text" data-i18n="schedule.item2">Cóctel y aperitivos</p>
+          </div>
+        </div>
+
+        <!-- Evento 3 -->
+        <div class="timeline__event">
+          <div class="timeline__icon">
+            <span class="material-icons">restaurant</span>
+          </div>
+          <div class="timeline__content">
+            <span class="timeline__time">13:30</span>
+            <p class="timeline__text" data-i18n="schedule.item3">Cena y brindis</p>
+          </div>
+        </div>
+
+        <!-- Evento 4 -->
+        <div class="timeline__event">
+          <div class="timeline__icon">
+            <span class="material-icons">celebration</span>
+          </div>
+          <div class="timeline__content">
+            <span class="timeline__time">16:00</span>
+            <p class="timeline__text" data-i18n="schedule.item4">Fiesta y baile</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
   <!-- 🗺 MAPA -->
   <section class="section location" id="location">
     <div class="container">
@@ -168,9 +228,10 @@
 
       <div class="map">
         <!-- Google Maps embed -->
-        <iframe
-          src="https://www.google.com/maps/embed?pb=..."
-          loading="lazy"
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d197294.5647114788!2d-0.526323053966262!3d39.40766898026844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd604f4cf0efb06f%3A0xb4a351011f7f1d39!2sVal%C3%A8ncia%2C%20Valencia!5e0!3m2!1ses!2ses!4v1770391583737!5m2!1ses!2ses"
+          style="border:0;" 
+          allowfullscreen="" 
+          loading="lazy" 
           referrerpolicy="no-referrer-when-downgrade">
         </iframe>
       </div>
