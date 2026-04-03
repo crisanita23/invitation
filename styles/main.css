@@ -358,9 +358,7 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   min-height: clamp(200px,26vw,360px);
-}
-@media (max-width: 540px) {
-  .bottom-grid { grid-template-columns: 1fr; }
+  margin-top: 50px;
 }
 
 /* Venue card */
@@ -445,6 +443,12 @@ body {
 .venue-block:hover .venue-link-hint {
   display: block;
   animation: fadeInUp 0.3s ease;
+}
+
+@media (max-width: 540px) {
+  .bottom-grid { grid-template-columns: 1fr;}
+  .venue-card-wrapper { padding: clamp(18px,3vw,52px) clamp(14px,3vw,44px); min-height: 350px; }
+  .venue-card { width: 85%; }
 }
 
 @keyframes fadeInUp {
