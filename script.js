@@ -1,381 +1,211 @@
-/* =========================
-   CONFIGURACIÓN SWIPER
-========================= */
-const weddingSwiper = new Swiper(".wedding-swiper", {
-  loop: true,
-  speed: 800,
+/* ── Countdown ── */
+const target = new Date('2026-09-12T17:00:00');
+let prevSec = -1;
 
-  autoplay: {
-    delay: 3500,
-    disableOnInteraction: false,
-  },
+function tick() {
+  const diff = target - new Date();
+  if (diff <= 0) {
+    ['cd-days','cd-hours','cd-min','cd-sec'].forEach(id =>
+      document.getElementById(id).textContent = '00');
+    return;
+  }
+  const d = Math.floor(diff / 86400000);
+  const h = Math.floor((diff % 86400000) / 3600000);
+  const m = Math.floor((diff % 3600000)  / 60000);
+  const s = Math.floor((diff % 60000)    / 1000);
 
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
+  document.getElementById('cd-days').textContent  = String(d).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(h).padStart(2,'0');
+  document.getElementById('cd-min').textContent   = String(m).padStart(2,'0');
 
-  navigation: {
-    nextEl: ".swiper-button-next",
-    prevEl: ".swiper-button-prev",
-  },
+  const secEl = document.getElementById('cd-sec');
+  secEl.textContent = String(s).padStart(2,'0');
+  if (s !== prevSec) {
+    secEl.classList.remove('tick');
+    void secEl.offsetWidth;
+    secEl.classList.add('tick');
+    prevSec = s;
+  }
+}
+tick();
+setInterval(tick, 500);
 
-  effect: "slide", // slide | fade | coverflow | cards
+/* ── RSVP ── */
+const rsvpForm = document.getElementById('rsvp-form');
+const rsvpName = document.getElementById('rsvp-name');
+const rsvpAttendance = document.getElementsByName('rsvp-attendance');
+const rsvpCompanions = document.getElementById('rsvp-companions');
+const companionsGroup = document.getElementById('companions-group');
+const rsvpBtn = document.getElementById('rsvp-btn');
 
-  grabCursor: true,
-
-  breakpoints: {
-    0: {
-      slidesPerView: 1,
-      spaceBetween: 20,
-    },
-    768: {
-      slidesPerView: 2,
-      spaceBetween: 30,
-    },
-    1024: {
-      slidesPerView: 3,
-      spaceBetween: 40,
-    },
-  },
+// Show/hide companions field based on attendance selection
+rsvpAttendance.forEach(radio => {
+  radio.addEventListener('change', (e) => {
+    companionsGroup.style.display = e.target.value === 'yes' ? 'flex' : 'none';
+  });
 });
 
-/* =========================
-   HEADER SCROLL
-========================= */
-
-let lastScroll = 0;
-const header = document.querySelector(".header");
-
-window.addEventListener("scroll", () => {
-  const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-
-  if (currentScroll > lastScroll && currentScroll > 100) {
-    // Scroll hacia abajo → ocultar
-    header.style.transform = "translateY(-100%)";
+// Handle form submission
+rsvpForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  
+  const name = rsvpName.value.trim();
+  const attendance = Array.from(rsvpAttendance).find(r => r.checked)?.value;
+  const companions = rsvpCompanions.value;
+  
+  // Validation
+  if (!name) {
+    rsvpName.style.borderColor = '#b03030';
+    rsvpName.focus();
+    return;
+  }
+  
+  if (!attendance) {
+    alert('Por favor, selecciona si asistirás o no');
+    return;
+  }
+  
+  // Clear any error states
+  rsvpName.style.borderColor = '';
+  
+  // Build confirmation message
+  let message = `¡Confirmado! ${name}`;
+  if (attendance === 'yes') {
+    message += attendance === 'yes' ? ` (${parseInt(companions) + 1} persona${parseInt(companions) > 0 ? 's' : ''})` : '';
   } else {
-    // Scroll hacia arriba → mostrar
-    header.style.transform = "translateY(0)";
+    message += ' (No asistirá)';
   }
-
-  lastScroll = currentScroll;
-
-  if (currentScroll <= 50) {
-    header.style.transform = "translateY(0)";
-  }
+  
+  rsvpBtn.textContent = message + ' 🌿';
+  rsvpBtn.style.background = '#2a6b54';
+  rsvpBtn.disabled = true;
+  rsvpForm.style.opacity = '0.7';
 });
 
+// Clear error on input
+rsvpName.addEventListener('input', () => { rsvpName.style.borderColor = ''; });
 
-/* =========================
-   HEADER MÓVIL
-========================= */
-const navToggle = document.getElementById("navToggle");
-const navMenu = document.getElementById("navMenu");
-
-navToggle.addEventListener("click", () => {
-  navMenu.classList.toggle("active");
-  navToggle.classList.toggle("active");
-});
-
-/* Cerrar menú al hacer click en un enlace */
-document.querySelectorAll(".nav__menu a").forEach(link => {
-  link.addEventListener("click", () => {
-    navMenu.classList.remove("active");
-    navToggle.classList.remove("active");
+/* ── Scroll reveal ── */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
-});
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-window.addEventListener("scroll", () => {
-  navMenu.classList.remove("active");
-  navToggle.classList.remove("active");
-});
-
-/* =========================
-   TRADUCCIONES
-========================= */
-const translations = {
-  es: {
-    menu: {
-      story: "Historia",
-      gallery: "Galería",
-      countdown: "Cuenta atrás",
-      details: "Detalles",
-      location: "Ubicación",
-      rsvp: "RSVP",
-    },
-    hero: {
-      title: "NOS CASAMOS",
-      subtitle: "24 de mayo de 2026 · Detroit",
-    },
-    story: {
-      title: "Nuestra historia",
-      text: "Un pequeño texto bonito contando vuestra historia o una frase especial.",
-    },
-    gallery: {
-      title: "Momentos",
-      slide1: "Nuestra historia comienza",
-      slide2: "El gran día se acerca",
-      slide3: "Te esperamos",
-    },
-    countdown: {
-      title: "Cuenta atrás",
-      days: "Días",
-      hours: "Horas",
-      minutes: "Minutos",
-      seconds: "Segundos",
-    },
-    details: {
-      title: "Detalles del evento",
-      date: "24 de mayo de 2026",
-      time: "17:00 h",
-      place: "Detroit, Michigan",
-      type: "Celebración religiosa",
-    },
-    schedule: {
-      title: "Horario del evento",
-      item1: "Ceremonia religiosa",
-      item2: "Cóctel y aperitivos",
-      item3: "Cena y brindis",
-      item4: "Fiesta y baile",
-    },
-    location: {
-      title: "Cómo llegar",
-    },
-    rsvp: {
-      title: "Confirmar asistencia",
-      name: "Nombre",
-      email: "Email",
-      button: "Confirmar",
-    },
-    footer: {
-      text: "Con cariño · A & B · 2026",
-    },
-  },
-
-  en: {
-    menu: {
-      story: "Story",
-      gallery: "Gallery",
-      countdown: "Countdown",
-      details: "Details",
-      location: "Location",
-      rsvp: "RSVP",
-    },
-    hero: {
-      title: "WE ARE GETTING MARRIED",
-      subtitle: "May 24, 2026 · Detroit",
-    },
-    story: {
-      title: "Our story",
-      text: "A small beautiful text telling your story.",
-    },
-    gallery: {
-      title: "Moments",
-      slide1: "Our story begins",
-      slide2: "The big day is coming",
-      slide3: "We are waiting for you",
-    },
-    countdown: {
-      title: "Countdown",
-      days: "Days",
-      hours: "Hours",
-      minutes: "Minutes",
-      seconds: "Seconds",
-    },
-    details: {
-      title: "Event details",
-      date: "May 24, 2026",
-      time: "5:00 PM",
-      place: "Detroit, Michigan",
-      type: "Religious ceremony",
-    },
-    schedule: {
-      title: "Event schedule",
-      item1: "Religious ceremony",
-      item2: "Cocktail & appetizers",
-      item3: "Dinner & toast",
-      item4: "Party & dancing",
-    },
-    location: {
-      title: "How to get there",
-    },
-    rsvp: {
-      title: "RSVP",
-      name: "Name",
-      email: "Email",
-      button: "Confirm",
-    },
-    footer: {
-      text: "With love · A & B · 2026",
-    },
-  },
-
-  ro: {
-    menu: {
-      story: "Poveste",
-      gallery: "Galerie",
-      countdown: "Numărătoare inversă",
-      details: "Detalii",
-      location: "Locație",
-      rsvp: "RSVP",
-    },
-    hero: {
-      title: "NE CĂSĂTORIM",
-      subtitle: "24 mai 2026 · Detroit",
-    },
-    story: {
-      title: "Povestea noastră",
-      text: "Un mic text frumos care spune povestea voastră.",
-    },
-    gallery: {
-      title: "Momente",
-      slide1: "Povestea noastră începe",
-      slide2: "Ziua cea mare se apropie",
-      slide3: "Vă așteptăm",
-    },
-    countdown: {
-      title: "Numărătoare inversă",
-      days: "Zile",
-      hours: "Ore",
-      minutes: "Minute",
-      seconds: "Secunde",
-    },
-    details: {
-      title: "Detalii eveniment",
-      date: "24 mai 2026",
-      time: "17:00",
-      place: "Detroit, Michigan",
-      type: "Ceremonie religioasă",
-    },
-    schedule: {
-      title: "Programul evenimentului",
-      item1: "Ceremonie religioasă",
-      item2: "Cocktail și aperitive",
-      item3: "Cină și toast",
-      item4: "Petrecere și dans",
-    },
-    location: {
-      title: "Cum ajungi",
-    },
-    rsvp: {
-      title: "Confirmare participare",
-      name: "Nume",
-      email: "Email",
-      button: "Confirmă",
-    },
-    footer: {
-      text: "Cu drag · A & B · 2026",
-    },
-  },
-};
-
-/* =========================
-   FUNCIÓN DE CAMBIO
-========================= */
-function setLanguage(lang) {
-  document.querySelectorAll("[data-i18n]").forEach(el => {
-    const keys = el.dataset.i18n.split(".");
-    let value = translations[lang];
-    keys.forEach(k => value = value?.[k]);
-    if (value) el.textContent = value;
-  });
-
-  document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
-    const keys = el.dataset.i18nPlaceholder.split(".");
-    let value = translations[lang];
-    keys.forEach(k => value = value?.[k]);
-    if (value) el.placeholder = value;
-  });
-
-  localStorage.setItem("language", lang);
-}
-
-/* =========================
-   EVENTOS
-========================= */
-document.querySelectorAll("[data-lang]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    setLanguage(btn.dataset.lang);
-  });
-});
-
-/* =========================
-   IDIOMA URL
-========================= */
-function getLangFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  const lang = params.get("lang");
-  if (lang && ["es", "en", "ro"].includes(lang)) {
-    return lang;
-  }
-  return null; // Ninguno válido
-}
-
-// Primero revisamos la URL
-const urlLang = getLangFromUrl();
-
-// Idioma guardado en localStorage
-const savedLang = localStorage.getItem("language");
-
-// Prioridad: URL > LocalStorage > Español por defecto
-const defaultLang = urlLang || savedLang || "es";
-
-setLanguage(defaultLang);
-
-document.querySelectorAll("[data-lang]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const lang = btn.dataset.lang;
-    setLanguage(lang);
-
-    // Actualizar query param sin recargar
-    const url = new URL(window.location);
-    url.searchParams.set("lang", lang);
-    window.history.replaceState({}, "", url);
-  });
-});
-
-// =========================
-// COUNTDOWN
-// =========================
-function startCountdown(targetDate) {
-  const daysEl = document.getElementById("days");
-  const hoursEl = document.getElementById("hours");
-  const minutesEl = document.getElementById("minutes");
-  const secondsEl = document.getElementById("seconds");
-
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-
-    if (distance <= 0) {
-      // Evento alcanzado
-      daysEl.textContent = "00";
-      hoursEl.textContent = "00";
-      minutesEl.textContent = "00";
-      secondsEl.textContent = "00";
-      clearInterval(countdownInterval);
-      return;
+/* ── Venue blocks (Calendar & Maps) ── */
+document.querySelectorAll('.venue-block').forEach(block => {
+  block.addEventListener('click', (e) => {
+    e.preventDefault();
+    const type = block.dataset.type;
+    
+    if (type === 'calendar') {
+      // Google Calendar link
+      const title = block.dataset.title || 'Evento';
+      const date = block.dataset.date; // Format: YYYYMMDDTHHMMSS
+      const location = block.dataset.location || '';
+      const description = block.dataset.description || '';
+      
+      // Format: startDate and endDate are YYYYMMDDTHHMMSS/YYYYMMDDTHHMMSS
+      const endTime = '20260912T190000'; // 2 hours after start
+      const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${date}/${endTime}&location=${encodeURIComponent(location)}&details=${encodeURIComponent(description)}`;
+      
+      window.open(calendarUrl, '_blank');
+    } 
+    else if (type === 'maps') {
+      // Google Maps link
+      const location = block.dataset.location || '';
+      const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(location)}`;
+      window.open(mapsUrl, '_blank');
     }
+  });
+});
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+/* ── Gallery Lightbox ── */
+const lightbox = document.getElementById('gallery-lightbox');
+const lightboxImage = document.getElementById('lightbox-image');
+const lightboxCurrent = document.getElementById('lightbox-current');
+const lightboxTotal = document.getElementById('lightbox-total');
+const lightboxClose = document.getElementById('lightbox-close');
+const lightboxPrev = document.getElementById('lightbox-prev');
+const lightboxNext = document.getElementById('lightbox-next');
 
-    // Agregar cero delante si es <10
-    daysEl.textContent = String(days).padStart(2, "0");
-    hoursEl.textContent = String(hours).padStart(2, "0");
-    minutesEl.textContent = String(minutes).padStart(2, "0");
-    secondsEl.textContent = String(seconds).padStart(2, "0");
-  }
+let galleryImages = [];
+let currentImageIndex = 0;
 
-  updateCountdown();
-  const countdownInterval = setInterval(updateCountdown, 1000);
+// Get all gallery images
+function initGallery() {
+  const galleryItems = document.querySelectorAll('[data-gallery="main"]');
+  galleryImages = Array.from(galleryItems).map(item => {
+    const img = item.querySelector('img');
+    return {
+      src: img.src.replace(/w=\d+/, 'w=1200'), // Higher quality for lightbox
+      alt: img.alt
+    };
+  });
+  lightboxTotal.textContent = galleryImages.length;
 }
 
-// Fecha objetivo: 24 de mayo de 2026 a las 17:00
-const weddingDate = new Date("2026-05-24T17:00:00").getTime();
-startCountdown(weddingDate);
+function openLightbox(index) {
+  currentImageIndex = index;
+  updateLightboxImage();
+  lightbox.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
 
+function closeLightbox() {
+  lightbox.classList.remove('active');
+  document.body.style.overflow = '';
+}
 
+function updateLightboxImage() {
+  if (galleryImages.length === 0) return;
+  
+  const image = galleryImages[currentImageIndex];
+  lightboxImage.src = image.src;
+  lightboxImage.alt = image.alt;
+  lightboxCurrent.textContent = currentImageIndex + 1;
+}
 
+function nextImage() {
+  currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+  updateLightboxImage();
+}
+
+function prevImage() {
+  currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+  updateLightboxImage();
+}
+
+// Event listeners for gallery items
+document.addEventListener('click', (e) => {
+  const galleryItem = e.target.closest('[data-gallery="main"]');
+  if (galleryItem) {
+    const index = Array.from(document.querySelectorAll('[data-gallery="main"]')).indexOf(galleryItem);
+    openLightbox(index);
+  }
+});
+
+// Lightbox controls
+lightboxClose.addEventListener('click', closeLightbox);
+lightboxPrev.addEventListener('click', prevImage);
+lightboxNext.addEventListener('click', nextImage);
+
+// Close lightbox when clicking outside the image
+lightbox.addEventListener('click', (e) => {
+  if (e.target === lightbox) {
+    closeLightbox();
+  }
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (lightbox.classList.contains('active')) {
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+    if (e.key === 'Escape') closeLightbox();
+  }
+});
+
+// Initialize gallery on page load
+initGallery();
